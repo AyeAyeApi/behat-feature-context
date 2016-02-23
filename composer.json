@@ -1,28 +1,28 @@
 {
-    "name": "ayeaye/behat-feature-context",
-    "description": "A Featre Context to help test Aye Aye based Apis",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Daniel Mason",
-            "email": "daniel@danielmason.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "behat/behat": "^3.0",
-        "ayeaye/formatters": "^1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^4.8"
-    },
-    "scripts" : {
-        "lint": [
-            "find -L src tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"
-        ],
-        "test": [
-            "@lint",
-            "vendor/bin/phpunit"
-        ]
+  "name": "ayeaye/behat-feature-context",
+  "description": "A Featre Context to help test Aye Aye based Apis",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Mason",
+      "email": "daniel@danielmason.com"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "behat/behat": "^3.0",
+    "ayeaye/formatters": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  },
+  "scripts": {
+    "lint": [
+      "find -L src tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"
+    ],
+    "test": [
+      "@lint",
+      "vendor/bin/phpunit"
+    ]
+  }
 }
