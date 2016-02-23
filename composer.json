@@ -1,0 +1,18 @@
+{
+    "name": "ayeaye/behat-feature-context",
+    "description": "A Featre Context to help test Aye Aye based Apis",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Mason",
+            "email": "daniel@danielmason.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "behat/behat": "^3.0",
+        "ayeaye/formatters": "^1.0"
+    },
+    "require-dev": {
+    }
+}
