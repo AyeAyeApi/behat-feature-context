@@ -60,6 +60,20 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @When I set header :header to :value
+     * @param $header
+     * @param $value
+     */
+    public function iSetHeaderTo($header, $value)
+    {
+        if(!$this->request) {
+            throw new FailedStepException("There was no request to set headers for");
+        }
+
+        $this->request->withHeader($header, $value);
+    }
+
+    /**
      * @When I send the request to :location
      * @When I send the request
      * @param $location
