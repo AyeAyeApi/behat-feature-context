@@ -1,0 +1,11 @@
+default:
+  autoload:
+    '' : %paths.base%/vendor/autoload.php
+  suites:
+    google:
+      paths:
+        - %paths.base%/tests/Behat/Google
+      contexts:
+        - AyeAye\Behat\FeatureContext:
+            baseUrl: "https://google.com"
+
