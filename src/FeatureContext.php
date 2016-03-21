@@ -50,9 +50,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
 
     /**
      * @Given I create a :method request
+     * @Given I create a request
      * @param $method
      */
-    public function iCreateARequest($method)
+    public function iCreateARequest($method = 'GET')
     {
         $this->response = null;
         $this->request = new Request($method, '');
@@ -60,9 +61,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
 
     /**
      * @When I send the request to :location
+     * @When I send the request
      * @param $location
      */
-    public function iSendTheRequestTo($location)
+    public function iSendTheRequestTo($location = '')
     {
         if(!$this->request) {
             throw new FailedStepException("There was no request to send");
