@@ -64,6 +64,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iSendTheRequestTo($location)
     {
+        if(!$this->request) {
+            throw new FailedStepException("There was no response to send");
+        }
+
         $this->request->withUri(
             new Uri($location)
         );
@@ -76,14 +80,14 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iExpectTheStatusCodeToBe($code)
     {
-        if($this->response instanceof Response) {
-            if($this->response->getStatusCode() != $code) {
-                throw new FailedStepException(
-                    "Expected status code '{$code}', actually got '{$this->response->getStatusCode()}'"
-                );
-            }
-            return;
+        if(!$this->response) {
+            throw new FailedStepException("There was no response to test");
         }
-        throw new FailedStepException("There was no response to test");
+
+        if($this->response->getStatusCode() != $code) {
+            throw new FailedStepException(
+                "Expected status code '{$code}', actually got '{$this->response->getStatusCode()}'"
+            );
+        }
     }
 }
