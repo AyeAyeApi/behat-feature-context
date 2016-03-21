@@ -120,4 +120,18 @@ class FeatureContext implements Context, SnippetAcceptingContext
             );
         }
     }
+
+    /**
+     * @Then I expect the body to contain :text
+     * @param $text
+     */
+    public function iExpectTheBodyToContain($text)
+    {
+        $contents = $this->getResponse()->getBody()->getContents();
+        if(strpos($contents , trim($text)) === false) {
+            throw new FailedStepException(
+                "Expected body to contain '{$text}', but it did not:\n$contents"
+            );
+        }
+    }
 }
