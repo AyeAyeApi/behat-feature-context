@@ -123,6 +123,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
 
     /**
      * @Then I expect the body to contain :text
+     * @Then I expect the body to contain:
      * @param $text
      */
     public function iExpectTheBodyToContain($text)
