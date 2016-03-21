@@ -60,17 +60,39 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * Get the request if one is available
+     * @throws \RuntimeException
+     * @return Request
+     */
+    protected function getRequest()
+    {
+        if(!$this->request) {
+            throw new \RuntimeException("No request has been created");
+        }
+        return $this->request;
+    }
+
+    /**
+     * Get the response if one is available
+     * @throws \RuntimeException
+     * @return Response
+     */
+    protected function getResponse()
+    {
+        if(!$this->response) {
+            throw new \RuntimeException("No response has been received, did you send a request");
+        }
+        return $this->response;
+    }
+
+    /**
      * @When I set header :header to :value
      * @param $header
      * @param $value
      */
     public function iSetHeaderTo($header, $value)
     {
-        if(!$this->request) {
-            throw new FailedStepException("There was no request to set headers for");
-        }
-
-        $this->request->withHeader($header, $value);
+        $this->getRequest()->withHeader($header, $value);
     }
 
     /**
@@ -80,14 +102,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iSendTheRequestTo($location = '')
     {
-        if(!$this->request) {
-            throw new FailedStepException("There was no request to send");
-        }
-
-        $this->request->withUri(
+        $this->getRequest()->withUri(
             new Uri($location)
         );
-        $this->response = $this->client->send($this->request);
+        $this->response = $this->client->send($this->getRequest());
     }
 
     /**
@@ -96,13 +114,9 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iExpectTheStatusCodeToBe($code)
     {
-        if(!$this->response) {
-            throw new FailedStepException("There was no response to test, did you send a request?");
-        }
-
-        if($this->response->getStatusCode() != $code) {
+        if($this->getResponse()->getStatusCode() != $code) {
             throw new FailedStepException(
-                "Expected status code '{$code}', actually got '{$this->response->getStatusCode()}'"
+                "Expected status code '{$code}', actually got '{$this->getResponse()->getStatusCode()}'"
             );
         }
     }
