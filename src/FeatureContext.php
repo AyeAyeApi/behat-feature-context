@@ -10,6 +10,7 @@ use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Uri;
 
 /**
  * Defines application features from the specific context.
@@ -20,6 +21,16 @@ class FeatureContext implements Context, SnippetAcceptingContext
      * @var Client
      */
     protected $client;
+
+    /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * @var Response
+     */
+    protected $response;
 
     /**
      * Initializes context.
@@ -36,5 +47,43 @@ class FeatureContext implements Context, SnippetAcceptingContext
             'base_uri' => $baseUrl
         ]);
     }
-}
 
+    /**
+     * @Given I create a :method request
+     * @param $method
+     */
+    public function iCreateARequest($method)
+    {
+        $this->response = null;
+        $this->request = new Request($method, '');
+    }
+
+    /**
+     * @When I send the request to :location
+     * @param $location
+     */
+    public function iSendTheRequestTo($location)
+    {
+        $this->request->withUri(
+            new Uri($location)
+        );
+        $this->response = $this->client->send($this->request);
+    }
+
+    /**
+     * @Then I expect the status code to be :code
+     * @param $code
+     */
+    public function iExpectTheStatusCodeToBe($code)
+    {
+        if($this->response instanceof Response) {
+            if($this->response->getStatusCode() != $code) {
+                throw new FailedStepException(
+                    "Expected status code '{$code}', actually got '{$this->response->getStatusCode()}'"
+                );
+            }
+            return;
+        }
+        throw new FailedStepException("There was no response to test");
+    }
+}
