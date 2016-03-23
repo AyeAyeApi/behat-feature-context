@@ -4,7 +4,7 @@ default:
   suites:
     google:
       paths:
-        - %paths.base%/tests/Behat/Google
+        - %paths.base%/test/Behat/Google
       contexts:
         - AyeAye\Behat\FeatureContext:
             baseUrl: "https://google.com"
