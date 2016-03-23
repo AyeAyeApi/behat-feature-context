@@ -1,4 +1,12 @@
 <?php
+/**
+ * FeatureContext.php
+ * @author    Daniel Mason <daniel@ayeayeapi.com>
+ * @copyright (c) 2016 Daniel Mason <daniel@ayeayeapi.com>
+ * @license   MIT
+ * @see       https://github.com/AyeAyeApi/behat-feature-context
+ */
+
 
 namespace AyeAye\Behat;
 
@@ -106,6 +114,16 @@ class FeatureContext implements Context, SnippetAcceptingContext
             new Uri($location)
         );
         $this->response = $this->client->send($this->getRequest());
+    }
+
+    /**
+     * @When I set the request body to:
+     * @param string $text
+     */
+    public function iSetRequestBodyTo($text = '')
+    {
+        $stream = \GuzzleHttp\Psr7\stream_for($text);
+        $this->getRequest()->withBody($stream);
     }
 
     /**

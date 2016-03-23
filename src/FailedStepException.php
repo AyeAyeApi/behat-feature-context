@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: daniel
- * Date: 21/03/2016
- * Time: 15:03
+ * FailedStepException.php
+ * @author    Daniel Mason <daniel@ayeayeapi.com>
+ * @copyright (c) 2016 Daniel Mason <daniel@ayeayeapi.com>
+ * @license   MIT
+ * @see       https://github.com/AyeAyeApi/behat-feature-context
  */
 
 namespace AyeAye\Behat;
