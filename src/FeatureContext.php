@@ -126,7 +126,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iSetHeaderTo($header, $value)
     {
-        $this->getRequest()->withHeader($header, $value);
+        $this->request = $this->getRequest()->withHeader($header, $value);
     }
 
     /**
@@ -136,7 +136,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iSendTheRequestTo($location = '')
     {
-        $this->getRequest()->withUri(
+        $this->request = $this->getRequest()->withUri(
             new Uri($location)
         );
         $this->response = $this->client->send($this->getRequest());
@@ -149,7 +149,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function iSetRequestBodyTo($text = '')
     {
         $stream = \GuzzleHttp\Psr7\stream_for($text);
-        $this->getRequest()->withBody($stream);
+        $this->request = $this->getRequest()->withBody($stream);
     }
 
     /**
