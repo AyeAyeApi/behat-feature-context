@@ -72,6 +72,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
         $this->request = new Request($method, '');
     }
 
+
     /**
      * Get the request if one is available
      * @throws \RuntimeException
@@ -107,6 +108,15 @@ class FeatureContext implements Context, SnippetAcceptingContext
         if (!$this->server) {
             $this->server = new SimpleAyeAyeServer(realpath($docRoot));
         }
+    }
+
+    /**
+     * For some reason the server isn't cleaned up properly before Scenario Outlines.
+     * @AfterScenario
+     */
+    public function stopServer()
+    {
+        $this->server = null;
     }
 
     /**
