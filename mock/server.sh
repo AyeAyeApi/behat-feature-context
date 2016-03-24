@@ -15,7 +15,7 @@ start ()
     then
         echo "Already started"
     else
-        php -S localhost:8000 -t . > /dev/null &
+        php -S localhost:8000 -t . index.php > /dev/null &
         echo $! > ${PID_FILE}
         status
     fi
