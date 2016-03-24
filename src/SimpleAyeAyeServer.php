@@ -42,7 +42,7 @@ class SimpleAyeAyeServer
         ];
         $pipes = [];
 
-        $this->process = proc_open("php -S localhost:8000 -t $docRoot", $descriptorSpec, $pipes);
+        $this->process = proc_open("php -S localhost:8000 $docRoot/index.php", $descriptorSpec, $pipes, $docRoot);
 
         // Give it a second and see if it worked
         sleep(1);
