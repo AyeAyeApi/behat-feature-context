@@ -41,6 +41,11 @@ class FeatureContext implements Context, SnippetAcceptingContext
     protected $response;
 
     /**
+     * @var SimpleAyeAyeServer
+     */
+    protected $server;
+
+    /**
      * Initializes context.
      *
      * Every scenario gets its own context instance.
@@ -94,6 +99,17 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @Given the server at :docRoot is started
+     * @param $docRoot
+     */
+    public function startServer($docRoot)
+    {
+        if(!$this->server) {
+            $this->server = new SimpleAyeAyeServer(realpath($docRoot));
+        }
+    }
+
+    /**
      * @When I set header :header to :value
      * @param $header
      * @param $value
@@ -137,6 +153,22 @@ class FeatureContext implements Context, SnippetAcceptingContext
                 "Expected status code '{$code}', actually got '{$this->getResponse()->getStatusCode()}'"
             );
         }
+    }
+
+    /**
+     * @Then I expect the header :header to be :value
+     * @param $header
+     * @param $value
+     */
+    public function iExpectTheHeader($header, $value)
+    {
+        $actualValues = (array)$this->getResponse()->getHeader($header);
+        foreach($actualValues as $actualValue) {
+            if($actualValue == $value) {
+                return;
+            }
+        }
+        throw new FailedStepException("Expected {$header} to be {$value}, but it was" . implode(", ", $actualValues));
     }
 
     /**

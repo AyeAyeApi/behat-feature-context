@@ -8,4 +8,10 @@ default:
       contexts:
         - AyeAye\Behat\FeatureContext:
             baseUrl: "https://google.com"
+    mock:
+      paths:
+        - %paths.base%/test/Behat/MockApi
+      contexts:
+        - AyeAye\Behat\FeatureContext:
+            baseUrl: "http://localhost:8000/"
 
