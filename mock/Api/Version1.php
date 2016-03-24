@@ -44,4 +44,13 @@ class Version1 extends Controller
         throw new AyeAyeException(418);
     }
 
+    /**
+     * Returns the parameter you give it
+     * @param $parameter
+     * @return mixed
+     */
+    public function postRepeatParameterEndpoint($parameter)
+    {
+        return $parameter;
+    }
 }

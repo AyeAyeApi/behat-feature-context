@@ -43,3 +43,16 @@ Feature: Test the indices of the Mock Api
       | accepts          | content-type     |
       | application/json | application/json |
       | application/xml  | application/xml  |
+
+  Scenario Outline: Headers
+    Given the server at "mock" is started
+    When I create a "POST" request
+    And I set parameter "parameter" to "<value>"
+    And I send the request to "repeat-parameter"
+    Then I expect the status code to be "200"
+    And I expect "[data]" to be "<value>"
+
+    Examples:
+      | value |
+      | foo   |
+      | bar   |
