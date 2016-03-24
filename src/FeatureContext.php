@@ -160,7 +160,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
     {
         if ($this->getResponse()->getStatusCode() != $code) {
             throw new FailedStepException(
-                "Expected status code '{$code}', actually got '{$this->getResponse()->getStatusCode()}'"
+                "Expected status code '{$code}', actually got '{$this->getResponse()->getStatusCode()}'" . PHP_EOL .
+                $this->getResponse()->getBody()
             );
         }
     }
@@ -178,7 +179,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
                 return;
             }
         }
-        throw new FailedStepException("Expected {$header} to be {$value}, but it was" . implode(", ", $actualValues));
+        throw new FailedStepException(
+            "Expected {$header} to be {$value}, but it was: " . implode(", ", $actualValues) . PHP_EOL .
+            $this->getResponse()->getBody()
+        );
     }
 
     /**
@@ -188,10 +192,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iExpectTheBodyToContain($text)
     {
-        $contents = $this->getResponse()->getBody()->getContents();
-        if (strpos($contents, trim($text)) === false) {
+        if (strpos($this->getResponse()->getBody(), trim($text)) === false) {
             throw new FailedStepException(
-                "Expected body to contain '{$text}', but it did not:\n$contents"
+                "Expected body to contain '{$text}', but it did not:" . PHP_EOL .
+                $this->getResponse()->getBody()
             );
         }
     }
