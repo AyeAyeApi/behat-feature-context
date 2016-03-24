@@ -10,11 +10,11 @@
 
 namespace AyeAye\Behat;
 
+use AyeAye\Formatter\Reader\Json;
+use AyeAye\Formatter\Reader\Xml;
+use AyeAye\Formatter\ReaderFactory;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Behat\Tester\Exception\PendingException;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
@@ -42,9 +42,19 @@ class FeatureContext implements Context, SnippetAcceptingContext
     protected $response;
 
     /**
+     * @var array
+     */
+    protected $responseData;
+
+    /**
      * @var SimpleAyeAyeServer
      */
     protected $server;
+
+    /**
+     * @var ReaderFactory
+     */
+    protected $readerFactory;
 
     /**
      * Initializes context.
@@ -57,6 +67,10 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function __construct($baseUrl = '')
     {
+        $this->readerFactory = new ReaderFactory([
+            new Json(),
+            new Xml()
+        ]);
         $this->client = new Client([
             'base_uri' => $baseUrl
         ]);
@@ -70,6 +84,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function iCreateARequest($method = 'GET')
     {
         $this->response = null;
+        $this->responseData = null;
         $this->request = new Request($method, '');
     }
 
@@ -145,6 +160,9 @@ class FeatureContext implements Context, SnippetAcceptingContext
         } catch (ClientException $e) {
             $this->response = $e->getResponse();
         }
+        $this->responseData = $this->readerFactory->read(
+            $this->getResponse()->getBody()
+        );
     }
 
     /**
