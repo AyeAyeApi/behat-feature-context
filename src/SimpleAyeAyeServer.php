@@ -10,7 +10,6 @@
 
 namespace AyeAye\Behat;
 
-
 class SimpleAyeAyeServer
 {
 
@@ -48,7 +47,7 @@ class SimpleAyeAyeServer
         // Give it a second and see if it worked
         sleep(1);
         $status = proc_get_status($this->process);
-        if(!$status['running']){
+        if (!$status['running']) {
             throw new \RuntimeException('Server failed to start: '.stream_get_contents($pipes[static::STDERR]));
         }
     }
@@ -61,8 +60,8 @@ class SimpleAyeAyeServer
         $status = proc_get_status($this->process);
         $parentPid = $status['pid'];
         $pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $parentPid`);
-        foreach($pids as $pid) {
-            if(is_numeric($pid)) {
+        foreach ($pids as $pid) {
+            if (is_numeric($pid)) {
                 posix_kill($pid, 9); //9 is the SIGKILL signal
             }
         }

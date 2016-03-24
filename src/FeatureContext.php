@@ -79,7 +79,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     protected function getRequest()
     {
-        if(!$this->request) {
+        if (!$this->request) {
             throw new \RuntimeException("No request has been created");
         }
         return $this->request;
@@ -92,7 +92,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     protected function getResponse()
     {
-        if(!$this->response) {
+        if (!$this->response) {
             throw new \RuntimeException("No response has been received, did you send a request");
         }
         return $this->response;
@@ -104,7 +104,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function startServer($docRoot)
     {
-        if(!$this->server) {
+        if (!$this->server) {
             $this->server = new SimpleAyeAyeServer(realpath($docRoot));
         }
     }
@@ -148,7 +148,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iExpectTheStatusCodeToBe($code)
     {
-        if($this->getResponse()->getStatusCode() != $code) {
+        if ($this->getResponse()->getStatusCode() != $code) {
             throw new FailedStepException(
                 "Expected status code '{$code}', actually got '{$this->getResponse()->getStatusCode()}'"
             );
@@ -163,8 +163,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function iExpectTheHeader($header, $value)
     {
         $actualValues = (array)$this->getResponse()->getHeader($header);
-        foreach($actualValues as $actualValue) {
-            if($actualValue == $value) {
+        foreach ($actualValues as $actualValue) {
+            if ($actualValue == $value) {
                 return;
             }
         }
@@ -179,7 +179,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function iExpectTheBodyToContain($text)
     {
         $contents = $this->getResponse()->getBody()->getContents();
-        if(strpos($contents , trim($text)) === false) {
+        if (strpos($contents, trim($text)) === false) {
             throw new FailedStepException(
                 "Expected body to contain '{$text}', but it did not:\n$contents"
             );
