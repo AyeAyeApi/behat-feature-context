@@ -58,6 +58,10 @@
       "# vendor/bin/phpmd src xml test reports/logs/pmd.xml",
       "vendor/bin/phpcs --report=checkstyle --report-file=reports/logs/checkstyle.xml --standard=phpcs.xml src",
       "vendor/bin/phpcpd --log-pmd reports/logs/pmd-cpd.xml src"
+    ],
+    "pre-commit" : [
+      "@test",
+      "@quality"
     ]
   }
 }
