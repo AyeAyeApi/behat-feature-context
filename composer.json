@@ -10,13 +10,19 @@
   ],
   "minimum-stability": "stable",
   "require": {
+    "php": "^5.5 || ^7.0",
     "behat/behat": "^3.0",
     "ayeaye/formatters": "^1.0",
     "guzzlehttp/guzzle": "^6.1"
   },
   "require-dev": {
+    "ayeaye/api": "^1.0",
     "phpunit/phpunit": "^4.8",
-    "ayeaye/api": "^1.0"
+    "squizlabs/php_codesniffer": "^2.5",
+    "phpmd/phpmd": "^2.4",
+    "sebastian/phpcpd": "^2.0",
+    "phploc/phploc": "^2.1",
+    "pdepend/pdepend": "^2.2"
   },
   "autoload": {
     "psr-4": {
@@ -31,11 +37,27 @@
   },
   "scripts": {
     "lint": [
-      "find -L src tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"
+      "find -L src test -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"
     ],
     "test": [
       "@lint",
-      "vendor/bin/phpunit"
+      "vendor/bin/behat"
+    ],
+    "quality" : [
+      "vendor/bin/phpcpd src",
+      "vendor/bin/phpcs --standard=phpcs.xml src",
+      "vendor/bin/phpmd src text phpmd.xml"
+    ],
+    "quality-fix" : [
+      "vendor/bin/phpcbf --standard=phpcs.xml src"
+    ],
+    "report" : [
+      "mkdir -p reports/logs",
+      "vendor/bin/phploc --count-tests --log-csv reports/logs/phploc.csv --log-xml reports/logs/phploc.xml src test",
+      "vendor/bin/pdepend --jdepend-xml=reports/logs/jdepend.xml --jdepend-chart=reports/dependencies.svg --overview-pyramid=reports/overview-pyramid.svg src",
+      "# vendor/bin/phpmd src xml test reports/logs/pmd.xml",
+      "vendor/bin/phpcs --report=checkstyle --report-file=reports/logs/checkstyle.xml --standard=phpcs.xml src",
+      "vendor/bin/phpcpd --log-pmd reports/logs/pmd-cpd.xml src"
     ]
   }
 }
