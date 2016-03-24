@@ -13,8 +13,7 @@ Feature: Test the indices of the Mock Api
     When I create a request
     And I send the request to "/coffee"
     Then I expect the status code to be "418"
-    And I expect the body to contain "data"
-    And I expect the body to contain "teapot"
+    And I expect "[data]" to be "I'm a teapot"
     And I expect the header "Content-Type" to be "application/json"
 
   Scenario Outline: Suffixes
