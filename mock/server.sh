@@ -34,7 +34,7 @@ stop ()
 
 status ()
 {
-    if ps -p `cat ${PID_FILE}` > /dev/null 2>&1
+    if ps -p `cat ${PID_FILE} 2> /dev/null` > /dev/null 2>&1
     then
         echo "started"
     else
