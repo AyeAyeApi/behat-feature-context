@@ -16,6 +16,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
@@ -139,7 +140,11 @@ class FeatureContext implements Context, SnippetAcceptingContext
         $this->request = $this->getRequest()->withUri(
             new Uri($location)
         );
-        $this->response = $this->client->send($this->getRequest());
+        try {
+            $this->response = $this->client->send($this->getRequest());
+        } catch (ClientException $e) {
+            $this->response = $e->getResponse();
+        }
     }
 
     /**
