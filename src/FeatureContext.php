@@ -93,7 +93,14 @@ class FeatureContext implements Context, SnippetAcceptingContext
             function ($matches) {
                 $match = reset($matches); // Get the first result
                 $match = trim($match, '[] \t\r\n');
-                return $this->getDataFromResponse($match);
+                $result = $this->getDataFromResponse($match);
+                if (!$result) {
+                    throw new FailedStepException('Key did not exist in data');
+                }
+                if (!is_string($result)) {
+                    throw new FailedStepException('Key found in data, but was not a string');
+                }
+                return $result;
             },
             $string
         );
@@ -113,6 +120,13 @@ class FeatureContext implements Context, SnippetAcceptingContext
             $data = $this->getResponseData();
         }
         $keyParts = explode('.', $key);
+
+        if (!is_array($data)) {
+            if (is_string($data)) {
+                throw new \RuntimeException('Response body was not or could not be unserialised: '.$data);
+            }
+            throw new \RuntimeException('Response body was not recognised');
+        }
 
         if ($keyParts) {
             $nextKeyPart = array_shift($keyParts);
@@ -178,7 +192,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     protected function stringToStream($string)
     {
-        $stream = fopen('php://temp','r+');
+        $stream = fopen('php://temp', 'r+');
         fwrite($stream, $string);
         rewind($stream);
         return new Stream($stream);
@@ -190,6 +204,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iSetTheBodyTo($string)
     {
+        $string = trim($string);
         $stream = $this->stringToStream($string);
         $this->request = $this->getRequest()->withBody($stream);
     }
@@ -262,9 +277,13 @@ class FeatureContext implements Context, SnippetAcceptingContext
         } catch (ClientException $e) {
             $this->response = $e->getResponse();
         }
-        $this->responseData = $this->readerFactory->read(
-            $this->getResponse()->getBody()
-        );
+
+        // Try to format it into an object, if possible
+        $body = $this->getResponse()->getBody()->getContents();
+        $this->responseData = $this->readerFactory->read($body);
+        if (!$this->responseData) {
+            $this->responseData = $body;
+        }
     }
 
     /**
