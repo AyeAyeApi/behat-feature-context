@@ -74,3 +74,22 @@ Feature: Test the indices of the Mock Api
       | value |
       | foo   |
       | bar   |
+
+  Scenario Outline: Body parameters
+    Given the server at "mock" is started
+    When I create a "POST" request
+    And I set the body to:
+    """
+      <?xml version="1.0" ?>
+      <document>
+        <parameter><value></parameter>
+      </document>
+    """
+    And I send the request to "repeat-parameter"
+    Then I expect the status code to be "200"
+    And I expect "[data]" to be "<value>"
+
+    Examples:
+      | value |
+      | foo   |
+      | bar   |
