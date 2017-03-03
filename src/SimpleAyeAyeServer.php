@@ -59,8 +59,8 @@ class SimpleAyeAyeServer
     public function __destruct()
     {
         $status = proc_get_status($this->process);
-        $parentPid = $status['pid'];
-        $pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $parentPid`);
+        $parentPid = (int)$status['pid'];
+        $pids = preg_split('/\s+/', `ps -o pid -p $parentPid | tail -n +2`);
         foreach ($pids as $pid) {
             if (is_numeric($pid)) {
                 posix_kill($pid, 9); //9 is the SIGKILL signal
