@@ -30,8 +30,9 @@ class SimpleAyeAyeServer
     /**
      * SimpleAyeAyeServer constructor.
      * @param string $docRoot
+     * @param string[] $env
      */
-    public function __construct($docRoot)
+    public function __construct($docRoot, array $env = [])
     {
         $docRoot = realpath($docRoot);
 
@@ -42,7 +43,7 @@ class SimpleAyeAyeServer
         ];
         $pipes = [];
 
-        $this->process = proc_open("php -S localhost:8000 $docRoot/index.php", $descriptorSpec, $pipes, $docRoot);
+        $this->process = proc_open("php -S localhost:8000 $docRoot/index.php", $descriptorSpec, $pipes, $docRoot, $env);
 
         // Give it a second and see if it worked
         sleep(1);

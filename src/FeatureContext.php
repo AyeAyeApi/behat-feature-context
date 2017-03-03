@@ -48,6 +48,11 @@ class FeatureContext implements Context, SnippetAcceptingContext
     protected $responseData;
 
     /**
+     * @var string[]
+     */
+    protected $serverEnvironmentVars = [];
+
+    /**
      * @var SimpleAyeAyeServer
      */
     protected $server;
@@ -144,13 +149,23 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @Given the server environment variable :name is set to :value
+     * @param $name
+     * @param $value
+     */
+    public function setServerEnvironmentVar($name, $value)
+    {
+        $this->serverEnvironmentVars[$name] = $value;
+    }
+
+    /**
      * @Given the server at :docRoot is started
      * @param $docRoot
      */
     public function startServer($docRoot)
     {
         if (!$this->server) {
-            $this->server = new SimpleAyeAyeServer(realpath($docRoot));
+            $this->server = new SimpleAyeAyeServer(realpath($docRoot), $this->serverEnvironmentVars);
         }
     }
 
@@ -160,6 +175,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function stopServer()
     {
+        $this->serverEnvironmentVars = [];
         $this->server = null;
     }
 
